@@ -1,25 +1,38 @@
+# coding=utf-8
 from __future__ import print_function
 import pandas as pd
 
 from science_concierge.science_concierge import ScienceConcierge
 from src.config import configuration
+from src.servicios import util
 
-file_path = configuration.FILE_PATH_EXAMPLE_CONTENT  # Path of example data for content algorithms
-df = pd.read_csv(file_path, encoding='utf-8')
-docs = list(df.abstract)  # provide list of abstracts
-titles = list(df.title)  # titles
+'''Formateo del CSV que se recibe por el necesario para el uso de Rocchio'''
+file_path = configuration.FILE_PATH_WORDPRESS  # CSV de WrodPress
+file_path_new = configuration.FILE_PATH_WORDPRESS_FORMATTED  # CSV formateado
+filtro_tag = ['Paul', 'paul', 'chris', 'Chris', 'kat', 'Kat']  # Tags filtro que se desee aplicar
+util.convertir_csv_widgets(file_path, file_path_new, filtros_tag=filtro_tag)
+
+'''Primer filtro que buscará la tag deseado en la data de wordpress,
+procedimiento que transformara la data de wordpress'''
+print('Rocchio >> Leyendo el archivo ' + file_path_new)
+df = pd.read_csv(file_path_new, encoding='utf-8')
+docs = list(df.tags)
+titles = list(df.widgets)
+
+'''Parámetros necesarios para el ScienceConcierge'''
 # select weighting from 'count', 'tfidf', or 'entropy'
 recommend_model = ScienceConcierge(stemming=True, ngram_range=(1, 1),
                                    weighting='entropy',
                                    norm=None,
-                                   n_components=100, n_recommend=100,
+                                   n_components=1, n_recommend=30,
                                    verbose=True)
 
-recommend_model.fit(docs)  # input list of documents or abstracts
-index = recommend_model.recommend(likes=[100],
+'''Parámetros necesarios para Rocchio'''
+recommend_model.fit(docs)  # input list of documents
+index = recommend_model.recommend(likes=[10],
                                   dislikes=[])  # input list of like/dislike index (here we like title[10000])
-docs_recommend = [titles[i] for i in index[0:10]]  # recommended documents
+docs_recommend = [titles[i] for i in index[0:5]]  # index[0:5] siendo 5 los widgets a recomendar .
 
-print ("Documentos recomendados a partir de las especificaciones de Rocchio:\n")
+print("Rocchio >> Documentos recomendados a partir de las especificaciones de Rocchio:\n")
 for d in docs_recommend:
-    print ("- " + d)
+    print("Rocchio >> - " + d)
