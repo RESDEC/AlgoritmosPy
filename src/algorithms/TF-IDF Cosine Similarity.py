@@ -16,10 +16,11 @@ def find_similar(tfidf_matrix, index, top_n=2):
 
 
 '''Formateo del CSV que se recibe por el necesario para el uso de TF-IDF'''
-file_path = configuration.FILE_PATH_WORDPRESS  # CSV de WrodPress
-file_path_new = configuration.FILE_PATH_WORDPRESS_FORMATTED  # CSV formateado
+file_path = configuration.FILE_PATH_WORDPRESS_CONTENT  # CSV de WordPress
+file_path_new = configuration.file_path_formatted("tf-idf")  # CSV formateado
 filtros_tag = []  # Tags filtro que se desee aplicar
-util.convertir_csv_widgets(file_path, file_path_new, filtros_tag)
+sep = '|'
+util.convertir_csv_widgets(file_path, file_path_new, filtros_tag, sep=sep)
 
 '''Leyendo CSV de WordPress formateado y preparando parámetros para usar TF-IDF'''
 corpus = []  # Matrix to get all the values from the CSV

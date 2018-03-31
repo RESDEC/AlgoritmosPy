@@ -7,10 +7,11 @@ from src.config import configuration
 from src.servicios import util
 
 '''Formateo del CSV que se recibe por el necesario para el uso de Rocchio'''
-file_path = configuration.FILE_PATH_WORDPRESS  # CSV de WrodPress
-file_path_new = configuration.FILE_PATH_WORDPRESS_FORMATTED  # CSV formateado
-filtro_tag = ['Paul', 'paul', 'chris', 'Chris', 'kat', 'Kat']  # Tags filtro que se desee aplicar
-util.convertir_csv_widgets(file_path, file_path_new, filtros_tag=filtro_tag)
+file_path = configuration.FILE_PATH_WORDPRESS_CONTENT  # CSV de WordPress
+file_path_new = configuration.file_path_formatted("rocchio")  # CSV formateado
+filtro_tag = ['facebook', 'cookie', 'widgets', 'photo', 'youtube']  # Tags filtro que se desee aplicar
+sep = '|'
+util.convertir_csv_widgets(file_path, file_path_new, filtros_tag=filtro_tag, sep=sep)
 
 '''Primer filtro que buscará la tag deseado en la data de wordpress,
 procedimiento que transformara la data de wordpress'''
